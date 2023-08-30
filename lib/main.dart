@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:likelion_2023_question_shuffle/constants.dart';
 import './questions.dart';
 
 void main() {
@@ -19,9 +20,7 @@ class MyApp extends StatelessWidget {
       builder: (context, _) {
         return MaterialApp(
           title: '2023 SKKU 멋사 아이스브레이킹 프로그램',
-          theme: ThemeData(
-            primaryColor: Color(0xFF2B6652),
-          ),
+          theme: ThemeData(primaryColor: Constants.mainColor),
           debugShowCheckedModeBanner: false,
           home: const MyHomePage(),
         );
@@ -55,7 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _shuffle() {
-    print("Shuffle");
     // 시작하지 않았다면?
     if (_isInit) {
       setState(() {
@@ -70,11 +68,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final bool _isDesk = MediaQuery.of(context).size.width > 520;
+    final bool isDesk = MediaQuery.of(context).size.width > 520;
     // check is desktop or Mobile
 
     return Scaffold(
-      backgroundColor: Color(0xFF2B6652),
+      backgroundColor: const Color(0xFF2B6652),
       // floating button 가운데 정렬
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
@@ -82,8 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Center(
           child: Container(
             width: double.infinity,
-            constraints: BoxConstraints(maxWidth: 512),
-            decoration: BoxDecoration(
+            constraints: const BoxConstraints(maxWidth: 512),
+            decoration: const BoxDecoration(
               color: Colors.white,
             ),
             child: Column(
@@ -92,26 +90,31 @@ class _MyHomePageState extends State<MyHomePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: _isDesk ? 30 : 30.w,
+                  height: isDesk ? 30 : 30.w,
                 ),
                 Text(
                   '멋사 질문 생성기',
                   style: TextStyle(
                     color: Colors.black,
-                    backgroundColor: Color(0xFF2B6652).withOpacity(0.7),
+                    backgroundColor: Constants.mainColor.withOpacity(0.7),
                     fontFamily: 'Aggro',
                     fontWeight: FontWeight.w500,
                     fontSize: 40.spMin,
                   ),
                 ),
-                SizedBox(height: _isDesk ? 130 : 130.w),
+                SizedBox(height: isDesk ? 130 : 130.w),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Container(
                     width: double.infinity,
-                    height: _isDesk ? 200 : 200.w,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    height: isDesk ? 200 : 200.w,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            width: 3,
+                            color: Constants.mainColor.withAlpha(200)),
+                        borderRadius: BorderRadius.circular(30)),
                     child: _isInit
                         ? AnimatedTextKit(
                             key: UniqueKey(),
@@ -122,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 speed: const Duration(milliseconds: 50),
                                 textStyle: TextStyle(
                                   fontFamily: "Dunggen",
-                                  fontSize: _isDesk ? 25 : 25.spMin,
+                                  fontSize: isDesk ? 25 : 25.spMin,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -139,28 +142,22 @@ class _MyHomePageState extends State<MyHomePage> {
                                 speed: const Duration(milliseconds: 50),
                                 textStyle: TextStyle(
                                   fontFamily: "Dunggen",
-                                  fontSize: _isDesk ? 25 : 25.spMin,
+                                  fontSize: isDesk ? 25 : 25.spMin,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
                           ),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 3,
-                          color: Color(0xFF2B6652).withAlpha(200),
-                        ),
-                        borderRadius: BorderRadius.circular(30)),
                   ),
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 Image.asset(
                   "assets/character.png",
-                  width: _isDesk ? 150 : 110.w,
-                  height: _isDesk ? 150 : 110.w,
+                  width: isDesk ? 150 : 110.w,
+                  height: isDesk ? 150 : 110.w,
                 ),
                 SizedBox(
-                  height: _isDesk ? 300 : 300.w,
+                  height: isDesk ? 300 : 300.w,
                 )
               ],
             ),
@@ -168,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: Padding(
-          padding: EdgeInsets.only(bottom: _isDesk ? 20 : 20.w),
+          padding: EdgeInsets.only(bottom: isDesk ? 20 : 20.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -180,10 +177,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.black.withOpacity(0.8),
                 ),
               ),
-              SizedBox(height: _isDesk ? 5 : 5.w),
+              SizedBox(height: isDesk ? 5 : 5.w),
               FloatingActionButton(
                 elevation: 3,
-                backgroundColor: Color(0xFF2B6652),
+                backgroundColor: Constants.mainColor,
                 onPressed: _shuffle,
                 child: const Icon(Icons.rocket_launch_outlined),
               ),
