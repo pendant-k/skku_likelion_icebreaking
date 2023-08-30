@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(390, 844),
       builder: (context, _) {
         return MaterialApp(
-          title: '2023 SKKU 멋쟁이사자처럼 아이스브레이킹 프로그램',
+          title: '2023 SKKU 멋사 아이스브레이킹 프로그램',
           theme: ThemeData(
             primaryColor: Color(0xFF2B6652),
           ),
