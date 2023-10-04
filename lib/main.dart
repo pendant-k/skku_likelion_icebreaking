@@ -39,16 +39,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // check is on progress or not
+  List<String> localQuestions = [...questions];
   bool _isInit = true;
-  bool _isFinish = false;
-  int _pickNum = 5;
+  // check is finished
+  // bool _isFinish = false;
+  int _pickNum = 0;
 
+  // Change current question
   void _changeQuestion() {
     setState(() {
-      if (questions.length > 1) {
-        _pickNum = Random().nextInt(questions.length - 1);
-      } else {
-        _isFinish = true;
+      if (localQuestions.length > 1) {
+        _pickNum = Random().nextInt(localQuestions.length - 1);
       }
     });
   }
@@ -59,11 +61,19 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _isInit = false;
       });
-      _changeQuestion();
-    } else {
-      questions.removeAt(_pickNum);
-      _changeQuestion();
+      return;
     }
+    // 끝났다면?
+    if (localQuestions.isEmpty) {
+      setState(() {
+        _isInit = true;
+        localQuestions = [...questions];
+      });
+      return;
+    }
+    // 질문을 뽑는다면?
+    localQuestions.removeAt(_pickNum);
+    _changeQuestion();
   }
 
   @override
@@ -76,33 +86,33 @@ class _MyHomePageState extends State<MyHomePage> {
       // floating button 가운데 정렬
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            width: double.infinity,
-            constraints: const BoxConstraints(maxWidth: 512),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
+      body: Center(
+        child: Container(
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height,
+          constraints: const BoxConstraints(maxWidth: 512),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: isDesk ? 30 : 30.w,
+                  height: isDesk ? 20 : 20.h,
                 ),
-                Text(
-                  '멋사 질문 생성기',
-                  style: TextStyle(
-                    color: Colors.black,
-                    backgroundColor: Constants.mainColor.withOpacity(0.7),
-                    fontFamily: 'Aggro',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 40.spMin,
-                  ),
-                ),
+                const MainTitleWidget(),
                 SizedBox(height: isDesk ? 130 : 130.w),
+                Image.asset(
+                  "assets/character.png",
+                  width: isDesk ? 150 : 110.w,
+                  height: isDesk ? 150 : 110.w,
+                ),
+                SizedBox(
+                  height: isDesk ? 20 : 20.w,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Container(
@@ -136,9 +146,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             totalRepeatCount: 1,
                             animatedTexts: [
                               TypewriterAnimatedText(
-                                _isFinish
+                                localQuestions.isEmpty
                                     ? "와우! 모든 질문을 뽑았어요"
-                                    : questions[_pickNum],
+                                    : localQuestions[_pickNum],
                                 speed: const Duration(milliseconds: 50),
                                 textStyle: TextStyle(
                                   fontFamily: "Dunggen",
@@ -150,42 +160,81 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                   ),
                 ),
-                const SizedBox(height: 50),
-                Image.asset(
-                  "assets/character.png",
-                  width: isDesk ? 150 : 110.w,
-                  height: isDesk ? 150 : 110.w,
-                ),
                 SizedBox(
-                  height: isDesk ? 300 : 300.w,
-                )
+                  height: isDesk ? 40 : 40.w,
+                ),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  width: double.infinity,
+                  height: isDesk ? 50 : 50.w,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: questions.isEmpty ? 40 : 20,
+                  ),
+                  child: ShuffleButtonWidget(
+                    isFinish: localQuestions.isEmpty,
+                    onTap: _shuffle,
+                  ),
+                ),
               ],
             ),
           ),
         ),
       ),
-      floatingActionButton: Padding(
-          padding: EdgeInsets.only(bottom: isDesk ? 20 : 20.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                '버튼을 눌러 질문을 뽑아주세요!',
-                style: TextStyle(
-                  fontFamily: "Dunggen",
-                  fontSize: 13.spMin,
-                  color: Colors.black.withOpacity(0.8),
-                ),
-              ),
-              SizedBox(height: isDesk ? 5 : 5.w),
-              FloatingActionButton(
-                elevation: 3,
-                backgroundColor: Constants.mainColor,
-                onPressed: _shuffle,
-                child: const Icon(Icons.rocket_launch_outlined),
-              ),
-            ],
-          )), //
+    );
+  }
+}
+
+class ShuffleButtonWidget extends StatelessWidget {
+  const ShuffleButtonWidget({
+    super.key,
+    required this.isFinish,
+    required this.onTap,
+  });
+
+  final bool isFinish;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      elevation: 5,
+      color: Constants.mainColor,
+      borderRadius: BorderRadius.circular(isFinish ? 30 : 10),
+      child: InkWell(
+        splashColor: Colors.white.withOpacity(0.3),
+        onTap: onTap,
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            isFinish ? '처음으로' : '질문 뽑기',
+            style: TextStyle(
+              fontFamily: "Dunggen",
+              fontSize: 20.spMin,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MainTitleWidget extends StatelessWidget {
+  const MainTitleWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '멋사 질문 생성기',
+      style: TextStyle(
+        color: Colors.black,
+        backgroundColor: Constants.mainColor.withOpacity(0.7),
+        fontFamily: 'Aggro',
+        fontWeight: FontWeight.w500,
+        fontSize: 40.spMin,
+      ),
     );
   }
 }
