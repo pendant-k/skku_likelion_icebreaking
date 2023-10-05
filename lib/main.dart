@@ -10,7 +10,75 @@ import './questions.dart';
 import 'widgets/widgets.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const TestApp());
+}
+
+class TestApp extends StatelessWidget {
+  const TestApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: QuestionPage(),
+    );
+  }
+}
+
+class QuestionPage extends StatefulWidget {
+  const QuestionPage({super.key});
+
+  @override
+  State<QuestionPage> createState() => _QuestionPageState();
+}
+
+class _QuestionPageState extends State<QuestionPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          '질문생성기',
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.deepOrange,
+      ),
+      body: Container(
+        width: double.infinity,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 50,
+            ),
+            Container(
+              width: 200,
+              height: 200,
+              color: Colors.deepOrange[200],
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                width: double.infinity,
+                height: 200,
+                color: Colors.deepOrange[300],
+                alignment: Alignment.center,
+                child: Text('질문'),
+              ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: Text('질문뽑기'),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
