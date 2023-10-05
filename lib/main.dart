@@ -1,9 +1,13 @@
-import 'dart:math';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
+
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:likelion_2023_question_shuffle/constants.dart';
 import './questions.dart';
+
+import 'widgets/widgets.dart';
 
 void main() {
   runApp(const MyApp());
@@ -179,61 +183,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class ShuffleButtonWidget extends StatelessWidget {
-  const ShuffleButtonWidget({
-    super.key,
-    required this.isFinish,
-    required this.onTap,
-  });
-
-  final bool isFinish;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      elevation: 5,
-      color: Constants.mainColor,
-      borderRadius: BorderRadius.circular(isFinish ? 30 : 10),
-      child: InkWell(
-        splashColor: Colors.white.withOpacity(0.3),
-        onTap: onTap,
-        child: Align(
-          alignment: Alignment.center,
-          child: Text(
-            isFinish ? '처음으로' : '질문 뽑기',
-            style: TextStyle(
-              fontFamily: "Dunggen",
-              fontSize: 20.spMin,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class MainTitleWidget extends StatelessWidget {
-  const MainTitleWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      '멋사 질문 생성기',
-      style: TextStyle(
-        color: Colors.black,
-        backgroundColor: Constants.mainColor.withOpacity(0.7),
-        fontFamily: 'Aggro',
-        fontWeight: FontWeight.w500,
-        fontSize: 40.spMin,
       ),
     );
   }
